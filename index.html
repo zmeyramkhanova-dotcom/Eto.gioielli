@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eto Gioielli — Приватный каталог</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --hero-bg: #100D0B;
+    --gold: #C9A461;
+    --gold-dim: #9C8158;
+    --cream: #F7F4EE;
+    --ink: #17140F;
+    --ink-dim: #8A8477;
+    --line: #E7E1D5;
+    --card-bg: #FFFFFF;
+  }
+
+  *{ box-sizing: border-box; }
+
+  body{
+    margin:0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Hero ---------- */
+
+  header{
+    background:
+      radial-gradient(ellipse at 50% -10%, #2A2118 0%, var(--hero-bg) 55%);
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+
+  .eyebrow{
+    font-size: 13px;
+    letter-spacing: 0.28em;
+    color: var(--gold);
+    margin-bottom: 26px;
+  }
+
+  h1.logo{
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    font-size: clamp(44px, 8vw, 76px);
+    margin: 0;
+    color: #F3EEE3;
+    letter-spacing: 0.01em;
+  }
+
+  h1.logo em{
+    font-style: italic;
+    font-weight: 500;
+    color: var(--gold);
+  }
+
+  .tagline{
+    margin-top: 20px;
+    font-size: 18px;
+    color: #C9C2B4;
+    font-weight: 300;
+  }
+
+  .access-note{
+    margin-top: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    border: 1px solid #4A3F2E;
+    border-radius: 999px;
+    padding: 10px 24px;
+  }
+
+  .access-note::before{
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+  }
+
+  /* ---------- Filter tabs ---------- */
+
+  .filters-wrap{
+    background: var(--cream);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  .filters{
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 22px 24px;
+  }
+
+  .filter-btn{
+    font-family: 'Jost', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    background: none;
+    border: none;
+    color: var(--ink);
+    padding: 9px 20px;
+    border-radius: 999px;
+    cursor: pointer;
+  }
+
+  .filter-btn.active{
+    background: var(--ink);
+    color: #fff;
+  }
+
+  .filter-btn:not(.active):hover{
+    color: var(--gold-dim);
+  }
+
+  /* ---------- Catalog grid ---------- */
+
+  main{
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 44px 24px 100px;
+  }
+
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 30px 24px;
+  }
+
+  .piece{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .piece-media{
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: #E9E3D6;
+    overflow: hidden;
+    cursor: default;
+  }
+
+  .piece-media img,
+  .piece-media video{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .piece-media.is-video{ cursor: pointer; }
+
+  .media-placeholder{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+  }
+
+  .video-badge{
+    position: absolute;
+    top: 14px;
+    left: 14px;
+    background: rgba(15, 12, 9, 0.72);
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    padding: 6px 12px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    pointer-events: none;
+  }
+
+  .video-badge svg{ width: 9px; height: 9px; }
+
+  .sound-toggle{
+    position: absolute;
+    bottom: 14px;
+    right: 14px;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgba(15, 12, 9, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+
+  .sound-toggle svg{ width: 15px; height: 15px; }
+
+  .piece-meta{
+    padding: 20px 18px 22px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+
+  .piece-cat{
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    color: var(--gold-dim);
+    margin-bottom: 6px;
+  }
+
+  .piece-name{
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 21px;
+    font-weight: 500;
+    margin: 0 0 6px;
+    color: var(--ink);
+  }
+
+  .piece-price{
+    font-size: 14.5px;
+    color: var(--ink);
+    margin: 0 0 8px;
+  }
+
+  .piece-desc{
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-dim);
+    margin: 0 0 14px;
+  }
+
+  .btn-write{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    background: var(--ink);
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: 15px 0;
+    margin-top: auto;
+    transition: background 0.2s ease;
+  }
+
+  .btn-write svg{ width: 18px; height: 18px; flex-shrink: 0; }
+
+  .btn-write:hover{ background: #000; }
+
+  /* ---------- Empty state ---------- */
+
+  .empty{
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 90px 20px;
+    border: 1px dashed var(--line);
+  }
+
+  .empty-title{
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    margin: 0 0 10px;
+  }
+
+  .empty-text{
+    font-size: 14px;
+    color: var(--ink-dim);
+    max-width: 380px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* ---------- Footer ---------- */
+
+  footer{
+    background: var(--hero-bg);
+    padding: 40px 24px;
+    text-align: center;
+  }
+
+  .footer-brand{
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+
+  .footer-note{
+    font-size: 12.5px;
+    color: #9C9284;
+  }
+
+  @media (max-width: 480px){
+    header{ padding: 60px 20px 44px; }
+    main{ padding: 36px 16px 72px; }
+    .filters{ gap: 2px; padding: 16px 12px; }
+    .filter-btn{ padding: 8px 14px; font-size: 14px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Ювелирная выставка</div>
+  <h1 class="logo">Eto <em>Gioielli</em></h1>
+  <p class="tagline">Каталог изделий</p>
+  <div class="access-note">Приватный доступ · только для гостей</div>
+</header>
+
+<div class="filters-wrap">
+  <div class="filters" id="filters">
+    <!-- кнопки категорий рендерятся скриптом из CATEGORIES -->
+  </div>
+</div>
+
+<main>
+  <div class="grid" id="grid">
+    <!-- карточки изделий рендерятся скриптом из ITEMS -->
+  </div>
+</main>
+
+<footer>
+  <div class="footer-brand">Eto Gioielli</div>
+  <div class="footer-note">По вопросам наличия и примерки — кнопка «Написать» под изделием</div>
+</footer>
+
+<script>
+  // Ссылка для кнопки «Написать» — поменяйте на реальный контакт (WhatsApp/Telegram)
+  const CONTACT_LINK = "https://wa.me/77017650239";
+
+  // Категории для фильтра. "Все" добавляется автоматически первым.
+  const CATEGORIES = ["Кольца", "Серьги", "Браслеты", "Колье", "Камни", "Другое"];
+
+  // Добавляйте новые изделия сюда по мере поступления.
+  // Поля: name, category, type ("video"/"photo"), media (путь к файлу),
+  // price (необязательно), desc (необязательно, короткое описание).
+  const ITEMS = [
+    {
+      name: "Изумруд · Замбия · 15.63 ct",
+      category: "Камни",
+      type: "video",
+      media: "assets/stone-01.mp4",
+      price: "$30 500",
+      desc: "2 камня · сертификат GRS. Отлично подойдут для серёг-пусетов — редкая пара, подобранная по цвету и форме."
+    },
+    {
+      name: "Изумруд · Замбия · 7.02 ct",
+      category: "Камни",
+      type: "video",
+      media: "assets/stone-02.mp4",
+      price: "$10 600",
+      desc: "Огранка «сердце»."
+    },
+    {
+      name: "Лаб-изумруд · 12.68 ct",
+      category: "Камни",
+      type: "video",
+      media: "assets/stone-03.mp4",
+      price: "$1 100",
+      desc: "2 камня, общая каратность."
+    },
+    {
+      name: "Лаб-изумруд под Замбию · 9.92 ct",
+      category: "Камни",
+      type: "photo",
+      media: "assets/stone-04.jpeg",
+      price: "$500"
+    },
+    {
+      name: "Лаб-параиба · 10.82 ct",
+      category: "Камни",
+      type: "photo",
+      media: "assets/stone-05.jpeg",
+      price: "$650"
+    },
+    {
+      name: "Лаб-параиба · 11.76 ct",
+      category: "Камни",
+      type: "photo",
+      media: "assets/stone-06.jpeg",
+      price: "$440"
+    },
+    {
+      name: "Лаб-параиба · 14.40 ct",
+      category: "Камни",
+      type: "photo",
+      media: "assets/stone-07.jpeg",
+      price: "$650",
+      desc: "2 камня, общая каратность."
+    },
+    {
+      name: "Лаб-параиба · 16.35 ct",
+      category: "Камни",
+      type: "photo",
+      media: "assets/stone-08.jpeg",
+      price: "$800"
+    },
+    {
+      name: "Лаб-параиба · 18.21 ct",
+      category: "Камни",
+      type: "photo",
+      media: "assets/stone-09.jpeg",
+      price: "$900"
+    },
+    {
+      name: "Лаб-параиба · 13.72 ct",
+      category: "Камни",
+      type: "photo",
+      media: "assets/stone-10.jpeg",
+      price: "$700"
+    },
+    {
+      name: "Нить бирюзы · Аризона · зелёная",
+      category: "Камни",
+      type: "photo",
+      media: "assets/turquoise-01.jpeg",
+      price: "$4 300",
+      desc: "Природная бирюза, 430 г (86 ct), длина 46 см."
+    },
+    {
+      name: "Нить бирюзы · Аризона · голубая",
+      category: "Камни",
+      type: "photo",
+      media: "assets/turquoise-02.jpeg",
+      price: "$2 950",
+      desc: "Природная бирюза, 368 г (73.6 ct), длина 41 см."
+    },
+    {
+      name: "Кольцо «Бирюза» · размер 17.5",
+      category: "Кольца",
+      type: "photo",
+      media: "assets/ring-turquoise-01.jpeg",
+      price: "$1 250",
+      desc: "Бирюза зелёная, Туркменистан."
+    },
+    {
+      name: "Кольцо «Бирюза» · размер 18.5",
+      category: "Кольца",
+      type: "photo",
+      media: "assets/ring-turquoise-02.jpeg",
+      price: "$1 500",
+      desc: "Бирюза зелёная, природная (не прессованная), Туркменистан."
+    },
+    {
+      name: "Нить бирюзы · зелёная · Ø10 мм",
+      category: "Камни",
+      type: "photo",
+      media: "assets/turquoise-03.jpeg",
+      price: "$1 800",
+      desc: "Очень редкая, длина нити 40–45 см."
+    },
+    {
+      name: "Браслет «Ларимар»",
+      category: "Браслеты",
+      type: "video",
+      media: "assets/larimar-bracelet.mp4",
+      price: "$1 540",
+      desc: "Диаметр бусин 16–18 мм, размер браслета 18–19 см."
+    },
+    {
+      name: "Серьги · золото 14K · лаб-бриллианты",
+      category: "Серьги",
+      type: "photo",
+      media: "assets/earrings-gold-01.jpeg",
+      price: "$3 300",
+      desc: "Жёлтое золото 14K, 13.76 г, диаметр 20 мм."
+    },
+    {
+      name: "Серьги · золото 14K · лаб-бриллианты",
+      category: "Серьги",
+      type: "photo",
+      media: "assets/earrings-gold-02.jpeg",
+      price: "$4 630",
+      desc: "Жёлтое золото 14K, 19.48 г, диаметр 30 мм."
+    },
+    {
+      name: "Кольца · матовое серебро 925",
+      category: "Кольца",
+      type: "photo",
+      media: "assets/rings-silver-display.jpeg"
+    },
+    {
+      name: "Чокер · речной жемчуг",
+      category: "Колье",
+      type: "photo",
+      media: "assets/choker-pearl-01.jpeg",
+      price: "$300",
+      desc: "Серебро 925, речной жемчуг, голубой циркон."
+    },
+    {
+      name: "Чокер · речной жемчуг",
+      category: "Колье",
+      type: "photo",
+      media: "assets/choker-pearl-02.jpeg",
+      price: "$300",
+      desc: "Серебро 925, речной натуральный жемчуг, голубой циркон."
+    },
+    {
+      name: "Серьги «Павлинье перо»",
+      category: "Серьги",
+      type: "photo",
+      media: "assets/earrings-peacock.jpeg",
+      price: "$350",
+      desc: "Черненое серебро 925, цирконы."
+    },
+    {
+      name: "Браслет · серебро 925",
+      category: "Браслеты",
+      type: "video",
+      media: "assets/bracelet-silver-zircon.mp4",
+      price: "$500",
+      desc: "Серебро 925, цирконы."
+    },
+    {
+      name: "Браслет · перламутр",
+      category: "Браслеты",
+      type: "photo",
+      media: "assets/bracelet-pearl-zircon.jpeg",
+      price: "$625",
+      desc: "Серебро 925, перламутр, циркон."
+    },
+    {
+      name: "Кольцо · жадеит и кристалл",
+      category: "Кольца",
+      type: "photo",
+      media: "assets/ring-jadeite-crystal.jpeg",
+      price: "$5 000",
+      desc: "Белое золото 18K. Основа — кристалл, сверху природный жадеит; по бокам гранат в форме сердца и розовые сапфиры. Размер 17.0–17.5. Все камни природные."
+    },
+    {
+      name: "Серьги · гранат и кристалл",
+      category: "Серьги",
+      type: "photo",
+      media: "assets/earrings-garnet-crystal.jpeg",
+      price: "$8 400",
+      desc: "Белое золото 18K, гранат, кристалл, розовые сапфиры, эмаль. Все камни природные."
+    },
+    {
+      name: "Кольцо «Аметист»",
+      category: "Кольца",
+      type: "photo",
+      media: "assets/ring-amethyst-turquoise.jpeg",
+      price: "$5 600",
+      desc: "Жёлтое золото 18K, аметист, бирюза, бриллианты. Размер 17.0."
+    },
+    {
+      name: "Серьги",
+      category: "Серьги",
+      type: "video",
+      media: "assets/set-video-01.mp4",
+      price: "$23 000"
+    },
+    {
+      name: "Кольцо",
+      category: "Кольца",
+      type: "video",
+      media: "assets/set-video-01.mp4",
+      price: "$18 600"
+    },
+    {
+      name: "Кольцо",
+      category: "Кольца",
+      type: "video",
+      media: "assets/ring-video-02.mp4",
+      price: "$24 400"
+    },
+    {
+      name: "Серьги",
+      category: "Серьги",
+      type: "video",
+      media: "assets/earrings-video-03.mp4",
+      price: "$5 400"
+    },
+    {
+      name: "Браслет",
+      category: "Браслеты",
+      type: "video",
+      media: "assets/set-video-04.mp4",
+      price: "$7 900"
+    },
+    {
+      name: "Колье",
+      category: "Колье",
+      type: "video",
+      media: "assets/set-video-04.mp4",
+      price: "$19 200"
+    },
+    {
+      name: "Кольцо · лаб-параиба",
+      category: "Кольца",
+      type: "video",
+      media: "assets/ring-paraiba-silver-01.mp4",
+      price: "$750",
+      desc: "Серебро 925, лабораторная параиба, цирконий. Размер 16.5–16.8."
+    },
+    {
+      name: "Кольцо · лаб-параиба",
+      category: "Кольца",
+      type: "video",
+      media: "assets/ring-paraiba-silver-02.mp4",
+      price: "$750",
+      desc: "Серебро 925, лабораторная параиба, цирконий. Размер 16.5–16.8."
+    },
+    {
+      name: "Серьги · синтетический изумруд",
+      category: "Серьги",
+      type: "video",
+      media: "assets/earrings-emerald-silver.mp4",
+      price: "$300",
+      desc: "Серебро 925, синтетический изумруд, цирконий."
+    },
+    {
+      name: "Колье · изумруд Замбия",
+      category: "Колье",
+      type: "video",
+      media: "assets/necklace-emerald-diamond.mp4",
+      price: "$35 000",
+      desc: "Белое золото 18K, 5.8 г. Природный бриллиант 0.4 ct, изумруд 5.64 ct (Замбия, сертификат GRS)."
+    },
+    {
+      name: "Серьги · изумруд Замбия",
+      category: "Серьги",
+      type: "video",
+      media: "assets/earrings-emerald-diamond.mp4",
+      price: "$65 000",
+      desc: "Белое золото 18K, 9.60 г. Бриллианты 3.01 ct общей (сертификат GIA), изумруды 8.98 ct высшего качества и цвета (сертификат GRS)."
+    }
+  ];
+
+  let activeCategory = "Все";
+
+  function renderFilters(){
+    const wrap = document.getElementById('filters');
+    const all = ["Все", ...CATEGORIES];
+    wrap.innerHTML = all.map(cat => `
+      <button class="filter-btn ${cat === activeCategory ? 'active' : ''}" data-cat="${cat}">${cat}</button>
+    `).join('');
+
+    wrap.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeCategory = btn.dataset.cat;
+        renderFilters();
+        renderGrid();
+      });
+    });
+  }
+
+  function mediaMarkup(item, idx){
+    if(item.type === 'video'){
+      return `
+        <div class="video-badge">
+          <svg viewBox="0 0 10 10" fill="white"><polygon points="0,0 10,5 0,10"/></svg>
+          ВИДЕО
+        </div>
+        <video id="video-${idx}" src="${item.media}" autoplay muted loop playsinline preload="auto"></video>
+        <div class="sound-toggle" data-role="sound">
+          <svg viewBox="0 0 24 24" fill="white"><path d="M4 9v6h4l5 5V4L8 9H4z"/><line x1="17" y1="8" x2="22" y2="16" stroke="white" stroke-width="1.6"/><line x1="22" y1="8" x2="17" y2="16" stroke="white" stroke-width="1.6"/></svg>
+        </div>
+      `;
+    }
+    return item.media
+      ? `<img src="${item.media}" alt="${item.name}">`
+      : `<div class="media-placeholder">ФОТО</div>`;
+  }
+
+  function renderGrid(){
+    const grid = document.getElementById('grid');
+    const list = activeCategory === "Все" ? ITEMS : ITEMS.filter(i => i.category === activeCategory);
+
+    if(list.length === 0){
+      grid.innerHTML = `
+        <div class="empty">
+          <p class="empty-title">${ITEMS.length === 0 ? 'Каталог пока пуст' : 'В этой категории пока нет изделий'}</p>
+          <p class="empty-text">Здесь появятся изделия по мере добавления. Пришлите фото или видео и описание — и они будут внесены в этот раздел.</p>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = list.map((item, idx) => `
+      <div class="piece">
+        <div class="piece-media ${item.type === 'video' ? 'is-video' : ''}" data-idx="${idx}" data-type="${item.type}">
+          ${mediaMarkup(item, idx)}
+        </div>
+        <div class="piece-meta">
+          <div class="piece-cat">${item.category.toUpperCase()}</div>
+          <h3 class="piece-name">${item.name}</h3>
+          ${item.price ? `<p class="piece-price">${item.price}</p>` : ""}
+          ${item.desc ? `<p class="piece-desc">${item.desc}</p>` : ""}
+          <a class="btn-write" href="${CONTACT_LINK}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="white"><path d="M12 3C6.48 3 2 6.94 2 11.7c0 2.6 1.36 4.93 3.5 6.5l-.9 3.3a.6.6 0 0 0 .85.7l3.68-1.7c.9.24 1.86.37 2.87.37 5.52 0 10-3.94 10-8.7S17.52 3 12 3z"/></svg>
+            Написать
+          </a>
+        </div>
+      </div>
+    `).join('');
+
+    grid.querySelectorAll('.piece-media.is-video').forEach(el => {
+      const video = el.querySelector('video');
+      const toggle = el.querySelector('.sound-toggle');
+      if(!video || !toggle) return;
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        video.muted = !video.muted;
+      });
+    });
+  }
+
+  renderFilters();
+  renderGrid();
+</script>
+
+</body>
+</html>
